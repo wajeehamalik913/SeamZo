@@ -25,6 +25,7 @@ export default function App (){
       <NavigationContainer>
         <Stack.Navigator initialRouteName = "Landing">
           <Stack.Screen name = "Landing" component = {WelcomeScreen} options = {{headerShown: false}}/>
+          <Stack.Screen name = "Landing" component = {WelcomeScreen} options = {{headerShown: false}}/>
           <Stack.Screen name = "Register" component = {RegisterScreen} options = {{headerShown: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
