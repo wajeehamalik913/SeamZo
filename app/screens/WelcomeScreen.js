@@ -6,7 +6,7 @@ export default function WelcomeScreen({ navigation}) {
     return(
      <ImageBackground
         style= {styles.background}
-        source= {require("../assets/greybackground.png")}
+        source= {require("../assets/greybackgro und.png")}
      >
          <Image style = {styles.logo} source = {require("../assets/seamzo.png")} />
          <View style = {styles.loginButton}>
