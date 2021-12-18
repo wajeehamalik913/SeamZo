@@ -24,7 +24,9 @@ const LandingScreen = ({navigation}) => {
             height: 100,
             width: 200}} 
             source = {require('../../assets/coins.png')} />
-
+      <Text>
+            
+      </Text>
     </View>
   );
 };
