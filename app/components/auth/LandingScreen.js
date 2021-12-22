@@ -2,6 +2,7 @@
 import React, {useState, createRef} from 'react';
 import {
   StyleSheet,
+  Button,
   TextInput,
   View,
   Text,
@@ -14,19 +15,27 @@ import {
 
 import Loader from '../Loader.js';
 
-const LandingScreen = ({navigation}) => {
+function LandingScreen  ({navigation}){
   
 
   return (
     <View style={styles.mainBody}>   
-      <Image style={{
-            resizeMode: "contain",
-            height: 100,
-            width: 200}} 
-            source = {require('../../assets/coins.png')} />
-      <Text>
-            
-      </Text>
+    <Image style={{
+      resizeMode: "contain",
+      height: 300,
+      width: 300}} 
+      source = {require('../../assets/coins.png')} />
+
+    <Button
+      title="Register"
+      onPress={() => navigation.navigate("SignupScreen")} />
+    <Button
+      title="Login"
+      onPress={() => navigation.navigate("LoginScreen")} />
+
+    <TouchableOpacity>
+    <Text style={styles.forgot_button}>Forgot Password?</Text>
+    </TouchableOpacity>
     </View>
   );
 };
@@ -35,10 +44,10 @@ export default LandingScreen;
 const styles = StyleSheet.create({
   mainBody: {
     display: "flex",
-    flexDirection: "vertical",
-    justifyContent: "space-around",
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
-    height: "100%",
+
     textAlign: "center"
   },
   SectionStyle: {
