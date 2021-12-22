@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
+import { friends } from './friends'
 import { user } from './user'
-import { users } from './users'
 
 const Reducers = combineReducers({
     userState: user,
-    usersState: users
+    friendsState: friends
 })
 
 export default Reducers

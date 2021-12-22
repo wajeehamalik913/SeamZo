@@ -7,7 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import firebase from 'firebase'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData } from '../redux/actions/index'
+import { fetchUser, fetchUserPosts, fetchUserFollowing, clearData } from '../redux/actions/actions'
 
 import FeedScreen from './main/Feed'
 import ProfileScreen from './main/ProfilePage'
@@ -33,7 +33,7 @@ class BottomTabNavigator extends Component {
       render() {
             return (
                   <Tab.Navigator initialRouteName="Feed" labeled={false}>
-                        <Tab.Screen name="Feed" component={FeedScreen}
+                        <Tab.Screen name="Feed" component={FeedScreen}navigation={this.props.navigation}
                               options={{
                                     tabBarIcon: ({ color, size }) => (
                                     <MaterialCommunityIcons name="home" color={color} size={26} />
@@ -57,7 +57,14 @@ class BottomTabNavigator extends Component {
                               <MaterialCommunityIcons name="plus-box" color={color} size={26} />
                         ),
                     }} />
-                        <Tab.Screen name="Profile" component={ProfileScreen} 
+                        <Tab.Screen name="ProfilePage" component={ProfileScreen} 
+                        options={{ headerShown: false }}
+                        
+                        listeners={({ navigation }) => ({
+                              tabPress: event => {
+                                    event.preventDefault();
+                                    navigation.navigate("ProfilePage", {uid: firebase.auth().currentUser.uid})
+                              }})}
                               options={{
                                     tabBarIcon: ({ color, size }) => (
                                     <MaterialCommunityIcons name="account-circle" color={color} size={26} />

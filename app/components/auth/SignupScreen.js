@@ -27,7 +27,7 @@ class SignupScreen extends Component {
         const { Email, Password, Name } = this.state;
         firebase.auth().createUserWithEmailAndPassword(Email, Password)
             .then((result) => {
-                firebase.firestore().collection("users")
+                firebase.firestore().collection("friends")
                     .doc(firebase.auth().currentUser.uid)
                     .set({
                         Name,

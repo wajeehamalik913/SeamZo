@@ -1,30 +1,28 @@
-import { USERS_DATA_STATE_CHANGE, USERS_POSTS_STATE_CHANGE, USERS_LIKES_STATE_CHANGE, CLEAR_DATA } from "../constants"
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, CLEAR_DATA } from "../constants/constants"
 
 const initialState = {
-    users: [],
-    feed: [],
-    usersFollowingLoaded: 0,
+    currentUser: null,
+    posts: [],
+    following: [],
 }
 
-export const users = (state = initialState, action) => {
+export const user = (state = initialState, action) => {
     switch (action.type) {
-        case USERS_DATA_STATE_CHANGE:
+        case USER_STATE_CHANGE:
             return {
                 ...state,
-                users: [...state.users, action.user]
+                currentUser: action.currentUser
             }
-        case USERS_POSTS_STATE_CHANGE:
+        case USER_POSTS_STATE_CHANGE:
             return {
                 ...state,
-                usersFollowingLoaded: state.usersFollowingLoaded + 1,
-                feed: [...state.feed, ...action.posts]
+                posts: action.posts
             }
-        case USERS_LIKES_STATE_CHANGE:
+
+        case USER_FOLLOWING_STATE_CHANGE:
             return {
                 ...state,
-                feed: state.feed.map(post => post.id == action.postId ? 
-                    {...post, currentUserLike: action.currentUserLike} :
-                    post)
+                following: action.following
             }
         case CLEAR_DATA:
             return initialState

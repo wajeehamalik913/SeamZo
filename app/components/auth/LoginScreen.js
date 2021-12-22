@@ -32,7 +32,7 @@ class LoginScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-              <TouchableWithoutFeedback onPress={ () => { DismissKeyboard() } }>
+              
                 <Image style={styles.image} source={require("../../assets/coins.png")} />
             
                   <StatusBar style="auto" />
@@ -67,7 +67,7 @@ class LoginScreen extends Component {
                       <Text style={styles.loginText}>LOGIN</Text>
                   </TouchableOpacity>
     
-                </TouchableWithoutFeedback>
+    
             </View>
         );
     }     

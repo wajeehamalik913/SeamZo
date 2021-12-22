@@ -23,14 +23,15 @@ const firebaseConfig = {
   measurementId: "G-6PHYXKJ099"
 };
 
-
+if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
-
+}
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './app/components/BottomTabNavigator'
-import AddScreen from './app/components/main/AddPost'
+import Add from './app/components/main/AddPost'
+import Upload from './app/components/main/Upload'
 import Landing from './app/components/auth/LandingScreen'
 import Login from './app/components/auth/LoginScreen'
 import Signup from './app/components/auth/SignupScreen'
@@ -75,8 +76,9 @@ render() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName="LandingScreen">
             <Stack.Screen name="LandingScreen" component={Landing} options={{ headerShown: false }} />
-            <Stack.Screen name="SignupScreen" component={Signup} />
             <Stack.Screen name="LoginScreen" component={Login} />
+            <Stack.Screen name="SignupScreen" component={Signup} />
+            
           </Stack.Navigator>
         </NavigationContainer>
       );
@@ -86,6 +88,8 @@ render() {
       <NavigationContainer >
           <Stack.Navigator initialRouteName="BottomTabNavigator">
             <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
+            <Stack.Screen name="AddPost" component = {Add} navigation={this.props.navigation} />
+            <Stack.Screen name="Upload" component = {Upload} navigation= {this.props.navigation} />
             
           </Stack.Navigator>
         </NavigationContainer>

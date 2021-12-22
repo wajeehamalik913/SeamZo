@@ -1,4 +1,4 @@
-import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, USERS_DATA_STATE_CHANGE,USERS_POSTS_STATE_CHANGE, USERS_LIKES_STATE_CHANGE, CLEAR_DATA} from '../constants/index'
+import { USER_STATE_CHANGE, USER_POSTS_STATE_CHANGE, USER_FOLLOWING_STATE_CHANGE, FRIENDS_DATA_STATE_CHANGE,FRIENDS_POSTS_STATE_CHANGE, FRIENDS_LIKES_STATE_CHANGE, CLEAR_DATA} from '../constants/constants'
 import firebase from 'firebase'
 import { SnapshotViewIOSComponent } from 'react-native'
 require('firebase/firestore')
@@ -12,7 +12,7 @@ export function clearData() {
 export function fetchUser() {
     return ((dispatch) => {
         firebase.firestore()
-            .collection("users")
+            .collection("friends")
             .doc(firebase.auth().currentUser.uid)
             .get()
             .then((snapshot) => {
@@ -58,18 +58,18 @@ export function fetchUserFollowing() {
                 })
                 dispatch({ type: USER_FOLLOWING_STATE_CHANGE, following });
                 for(let i = 0; i < following.length; i++){
-                    dispatch(fetchUsersData(following[i], true));
+                    dispatch(fetchfriendsData(following[i], true));
                 }
             })
     })
 }
 
-export function fetchUsersData(uid, getPosts) {
+export function fetchFriendsData(uid, getPosts) {
     return ((dispatch, getState) => {
-        const found = getState().usersState.users.some(el => el.uid === uid);
+        const found = getState().friendsState.friends.some(el => el.uid === uid);
         if (!found) {
             firebase.firestore()
-                .collection("users")
+                .collection("friends")
                 .doc(uid)
                 .get()
                 .then((snapshot) => {
@@ -77,20 +77,20 @@ export function fetchUsersData(uid, getPosts) {
                         let user = snapshot.data();
                         user.uid = snapshot.id;
 
-                        dispatch({ type: USERS_DATA_STATE_CHANGE, user });
+                        dispatch({ type: FRIENDS_DATA_STATE_CHANGE, user });
                     }
                     else {
                         console.log('does not exist')
                     }
                 })
                 if(getPosts){
-                    dispatch(fetchUsersFollowingPosts(uid));
+                    dispatch(fetchFriendsFollowingPosts(uid));
                 }
         }
     })
 }
 
-export function fetchUsersFollowingPosts(uid) {
+export function fetchFriendsFollowingPosts(uid) {
     return ((dispatch, getState) => {
         firebase.firestore()
             .collection("posts")
@@ -100,7 +100,7 @@ export function fetchUsersFollowingPosts(uid) {
             .get()
             .then((snapshot) => {
                 const uid = snapshot.query._.C_.path.segments[1]
-                const user = getState().usersState.users.find(el => el.uid === uid);
+                const user = getState().friendsState.friends.find(el => el.uid === uid);
 
 
                 let posts = snapshot.docs.map(doc => {
@@ -110,15 +110,15 @@ export function fetchUsersFollowingPosts(uid) {
                 })
 
                 for(let i = 0; i< posts.length; i++){
-                    dispatch(fetchUsersFollowingLikes(uid, posts[i].id))
+                    dispatch(fetchfriendsFollowingLikes(uid, posts[i].id))
                 }
-                dispatch({ type: USERS_POSTS_STATE_CHANGE, posts, uid })
+                dispatch({ type: FRIENDS_POSTS_STATE_CHANGE, posts, uid })
 
             })
     })
 }
 
-export function fetchUsersFollowingLikes(uid, postId) {
+export function fetchFriendsFollowingLikes(uid, postId) {
     return ((dispatch, getState) => {
         firebase.firestore()
             .collection("posts")
@@ -135,7 +135,7 @@ export function fetchUsersFollowingLikes(uid, postId) {
                     currentUserLike = true;
                 }
 
-                dispatch({ type: USERS_LIKES_STATE_CHANGE, postId, currentUserLike })
+                dispatch({ type: FRIENDS_LIKES_STATE_CHANGE, postId, currentUserLike })
             })
     })
 }
