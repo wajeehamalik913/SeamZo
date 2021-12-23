@@ -32,42 +32,46 @@ class LoginScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-              
-                <Image style={styles.image} source={require("../../assets/coins.png")} />
-            
-                  <StatusBar style="auto" />
-  
-                  <View style={styles.inputView} >
+
+                  <View style = {styles.imageContainer}>
+                   <Image style={styles.image} source={require("../../assets/coins.png")} />
+                  </View>
+
+
+                  <View style={styles.SectionStyle} >
                       <TextInput
-                      style={styles.TextInput}
+                      style={styles.inputStyle}
                       
                       placeholder="Email"
-                      placeholderTextColor="#003f5c"
+                      underlineColorAndroid="#f000"
+                      placeholderTextColor="#8b9cb5"
                       
                       onChangeText={(email) => this.setState({email})}
                       />
                   </View>
               
-                  <View style={styles.inputView}>
+                  <View style={styles.SectionStyle}>
                       <TextInput
-                      style={styles.TextInput}
+                      style={styles.inputStyle}
                       placeholder="Password"
-                      placeholderTextColor="#003f5c"
+                      underlineColorAndroid="#f000"
+                      placeholderTextColor="#8b9cb5"
                       secureTextEntry={true}
                       onChangeText={(password) => this.setState({password})}
                       />
                   </View>
-              
+                  
+                  
+
+                  <TouchableOpacity style={styles.buttonStyle} onPress={() => this.onSignIn()}>
+                      <Text style={styles.buttonTextStyle}>LOGIN</Text>
+                  </TouchableOpacity>
+
+
                   <TouchableOpacity>
                       <Text style={styles.forgot_button}>Forgot Password?</Text>
                   </TouchableOpacity>
-              
-                  <TouchableOpacity style={styles.loginBtn} onPress={() => this.onSignIn()}>
-                      
-                      <Text style={styles.loginText}>LOGIN</Text>
-                  </TouchableOpacity>
-    
-    
+          
             </View>
         );
     }     
@@ -86,9 +90,14 @@ const styles = StyleSheet.create({
   },
  
   image: {
-    marginBottom: 40,
+    width: 250,
+    height: 250,
   },
  
+  imageContainer:{
+    flex: 1/2,
+    alignContent: 'center'
+  },
   inputView: {
     backgroundColor: "#FFC0CB",
     borderRadius: 30,
@@ -96,7 +105,24 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
  
-    alignItems: "center",
+  },
+
+  SectionStyle: {
+    
+    height: 40,
+    marginBottom: 20,
+
+  },
+  
+
+  inputStyle: {
+    flex: 1,
+    color: 'black',
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderWidth: 1,
+    borderRadius: 30,
+    borderColor: '#dadae8',
   },
  
   TextInput: {
@@ -120,4 +146,22 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#FF1493",
   },
+
+  buttonStyle: {
+    backgroundColor: '#7DE24E',
+    borderWidth: 0,
+    color: '#FFFFFF',
+    borderColor: '#7DE24E',
+    height: 40,
+    alignItems: 'center',
+    borderRadius: 30,
+    marginTop: 40,
+    
+  },
+  buttonTextStyle: {
+    color: '#FFFFFF',
+    paddingVertical: 10,
+    paddingHorizontal:40,
+    fontSize: 16,
+  }
 });

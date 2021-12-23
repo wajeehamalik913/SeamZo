@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import { View, Text,Image,
-   ImageBackground,FlatList, TextInput, TouchableOpacity} from 'react-native'
+   ImageBackground,FlatList, TextInput, TouchableOpacity, colors, StyleSheet} from 'react-native'
 
 import firebase from 'firebase';
+import { Searchbar } from 'react-native-paper';
 require('firebase/firestore');
 
 export default function Search(props) {
@@ -21,6 +22,10 @@ export default function Search(props) {
 
    const [users, setUsers] = useState([])
 
+
+   // FetchUsers function as being called inside the redux store . actions.js
+
+   
     const fetchUsers = (search) => {
         firebase.firestore()
             .collection('users')
@@ -35,27 +40,68 @@ export default function Search(props) {
                 setUsers(users);
                 console.log(users)
             })
-      
         }
+        console.log(users)
       return (
             <View>
-                  <TextInput
-                     placeholder="Type Here..."
-                    onChangeText={(search) => fetchUsers(search)} />
-
+                  <Searchbar
+                        placeholder="Search a User..."
+                        onChangeText={(search) => fetchUsers(search)} />
+                  
                   <FlatList
+                        style = {styles.flatList}
                         numColumns={1}
                         horizontal={false}
                         data={users}
+                        ItemSeparatorComponent={() => (
+                        <View
+                              style={{height: 0.5, backgroundColor: 'grey',paddingBottom:10}}></View>
+                        )}
+                        
+
                         renderItem={({ item }) => (
-                              <TouchableOpacity
-                                    onPress={() => props.navigation.navigate("Profile", {uid: item.id})}>
-                                    <Text>{item.name}</Text>
+                              
+                              <TouchableOpacity 
+                                    style={{paddingBottom:10}}
+                                    onPress={() => props.navigation.navigate("ProfilePage", {uid: item.id})}>
+                                         <View
+                                          style={{
+                                                width: 45,
+                                                height: 45,
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                backgroundColor: 'grey',
+                                                borderRadius: 100,
+                                    }}>
+                                          <Text style={[styles.name, {color: 'white'}]}>
+                                                {item.Name[0]}
+                                          </Text>
+                                    </View>   
+                                    <Text styles = {styles.textBox}>
+                                          
+                                          {item.Name}</Text>
+
+                                    <Text styles = {styles.textBox}>
+                                          
+                                          {item.Email}</Text> 
+                                    
                               </TouchableOpacity>
-                           )}
+                        )}
                   />
                   
             </View>
             
       )
 }
+
+const styles = StyleSheet.create({
+      textBox: {
+            fontSize:50
+      },
+      flatList:{
+            flex:1
+      },
+      name: {fontSize: 17},
+
+})

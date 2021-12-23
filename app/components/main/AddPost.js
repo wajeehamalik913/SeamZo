@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 
+// This resource code has been picked from Expo-image-picker boiler plate code
+
 
 export default function Add({ navigation }) {
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
@@ -23,6 +25,8 @@ export default function Add({ navigation }) {
     })();
   }, []);
 
+
+  // Function to take picture
   const takePicture = async () => {
     if (camera) {
       const data = await camera.takePictureAsync(null);
@@ -30,6 +34,8 @@ export default function Add({ navigation }) {
     }
   }
 
+
+  // Function for picking Image from Gallery
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -53,7 +59,7 @@ export default function Add({ navigation }) {
   }
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.cameraContainer}>
+      <View style={styles.cameraCon}>
         <Camera
           ref={ref => setCamera(ref)}
           style={styles.fixedRatio}
@@ -74,21 +80,40 @@ export default function Add({ navigation }) {
       </Button>  
       
       <Button title="Take Picture" onPress={() => takePicture()} />
+
       <Button title="Pick Image From Gallery" onPress={() => pickImage()} />
+
       <Button title="Upload" onPress={() => navigation.navigate('Upload', { image })} />
-      {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+      {image && <Image 
+                source={{ uri: image }} style={{ flex: 1 }} />}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  cameraContainer: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-
+ 
+ containerGallery: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
+    containerImage: {
+        flex: 1,
+        resizeMode: 'contain',
+        flexDirection: 'column',
+        justifyContent:'center',
+        paddingHorizontal: 5
+    },
+    image: {
+        flex: 1,
+        aspectRatio: 1 / 1
+    },
   fixedRatio: {
     flex: 1,
     aspectRatio: 1
-  }
+  },
+
+   cameraCon: {
+    flex: 1,
+    flexDirection: 'row'
+  },
 })

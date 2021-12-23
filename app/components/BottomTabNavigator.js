@@ -32,19 +32,28 @@ class BottomTabNavigator extends Component {
 
       render() {
             return (
+                  // Bottom Tab Navigator for the Main Navigation of Social Media
                   <Tab.Navigator initialRouteName="Feed" labeled={false}>
-                        <Tab.Screen name="Feed" component={FeedScreen}navigation={this.props.navigation}
+
+                        {/*  Home Screen Navigation */}
+                        <Tab.Screen name="Feed" component={FeedScreen} navigation={this.props.navigation}
                               options={{
                                     tabBarIcon: ({ color, size }) => (
                                     <MaterialCommunityIcons name="home" color={color} size={26} />
                                     ),
                               }} />
+
+
+                        {/*  Search Screen Navigation */}
                         <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation}
                               options={{
                                     tabBarIcon: ({ color, size }) => (
                                     <MaterialCommunityIcons name="magnify" color={color} size={26} />
                                     ),
                               }} />
+
+                        {/*  Adding Pictures or Taking Pictures Navigation
+                        It will Navigate to Camera  */}
                         <Tab.Screen name="AddContainer" component={EmptyScreen}
                               listeners={({ navigation }) => ({
                                     tabPress: event => {
@@ -57,6 +66,8 @@ class BottomTabNavigator extends Component {
                               <MaterialCommunityIcons name="plus-box" color={color} size={26} />
                         ),
                     }} />
+
+                         {/*  Profile Page Navigation */}
                         <Tab.Screen name="ProfilePage" component={ProfileScreen} 
                         options={{ headerShown: false }}
                         
@@ -75,9 +86,12 @@ class BottomTabNavigator extends Component {
       }
 }
 
+
+
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser
 })
+
 const mapDispatchProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing, clearData }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchProps)(BottomTabNavigator);
