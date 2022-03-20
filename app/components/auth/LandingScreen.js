@@ -2,6 +2,7 @@
 import React, {useState, createRef} from 'react';
 import {
   StyleSheet,
+  Button,
   TextInput,
   View,
   Text,
@@ -14,20 +15,53 @@ import {
 
 import Loader from '../Loader.js';
 
-const LandingScreen = ({navigation}) => {
+function LandingScreen  ({navigation}){
   
-
   return (
-    <View style={styles.mainBody}>   
-      <Image style={{
+    <View style = {styles.mainBody} >
+     <Image style={{
             resizeMode: "contain",
-            height: 100,
-            width: 200}} 
+            marginTop:50,
+            height: 300,
+            width: 300}} 
             source = {require('../../assets/coins.png')} />
-      <Text>
-            
-      </Text>
+    
+     <Image style={{
+            resizeMode: "contain",
+            height: 400,
+            marginTop:1,
+            bottom:180,
+            width: 400}} 
+            source = {require('../../assets/seamzo.png')} />
+
+    <View style={styles.simpleHeader}>
+
+          </View>
+      <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate("SignupScreen")} >
+              <Text style={styles.buttonTextStyle}>SignUp Now</Text>
+        </TouchableOpacity>
+       <TouchableOpacity
+              style={styles.buttonStyle}
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate("LoginScreen")} >
+              <Text style={styles.buttonTextStyle}>Login Now</Text>
+        </TouchableOpacity>
+              
+
+      <TouchableOpacity>
+         <Text style={styles.forgot_button}>Forgot Password?</Text>
+      </TouchableOpacity>
+
+
     </View>
+
+        
+    
+
+    
   );
 };
 export default LandingScreen;
@@ -35,13 +69,40 @@ export default LandingScreen;
 const styles = StyleSheet.create({
   mainBody: {
     display: "flex",
-    flexDirection: "vertical",
-    justifyContent: "space-around",
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
-    height: "100%",
     textAlign: "center"
   },
+  simpleHeader: {
+    flex: 1
+    
+  },  
+
+  heading :{
+    fontSize:30,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignContent: 'center'
+  },
   SectionStyle: {
+    flexDirection: 'row',
+    height: 40,
+    marginTop: 20,
+    marginLeft: 35,
+    marginRight: 35,
+    margin: 10,
+  },
+  registerButton: {
+    flexDirection: 'row',
+    color: "black",
+    height: 40,
+    marginTop: 20,
+    marginLeft: 35,
+    marginRight: 35,
+    margin: 10,
+  },
+  loginButton: {
     flexDirection: 'row',
     height: 40,
     marginTop: 20,
@@ -54,7 +115,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
-  
   buttonStyle: {
     backgroundColor: '#7DE24E',
     borderWidth: 0,
@@ -67,10 +127,14 @@ const styles = StyleSheet.create({
     marginRight: 35,
     marginTop: 20,
     marginBottom: 25,
+    bottom:100
+    
   },
+  
   buttonTextStyle: {
     color: '#FFFFFF',
     paddingVertical: 10,
+    paddingHorizontal: 40,
     fontSize: 16,
   },
   inputStyle: {

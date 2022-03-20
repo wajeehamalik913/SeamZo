@@ -1,269 +1,180 @@
-// Example of Splash, Login and Sign Up in React Native
-// https://aboutreact.com/react-native-login-and-signup/
 
 // Import React and Component
-import React, {useState, createRef} from 'react';
-import request from 'superagent';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React, {useState,Component} from 'react';
+import { View, Button, StatusBar, Text, Image,TextInput ,StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native'
 
-import Loader from '../Loader.js';
 
-const RegisterScreen = (props) => {
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userAge, setUserAge] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errortext, setErrortext] = useState('');
-  const [
-    isRegistraionSuccess,
-    setIsRegistraionSuccess
-  ] = useState(false);
+import firebase from 'firebase'
+import "firebase/firestore";
 
-  const emailInputRef = createRef();
-  const ageInputRef = createRef();
-  const passwordInputRef = createRef();
+console.log("Sign up Called");
 
-  const handleSubmitButton = () => {
-    setErrortext('');
-    if (!userName) {
-      alert('Please fill Name');
-      return;
-    }
-    if (!userEmail) {
-      alert('Please fill Email');
-      return;
-    }
-    if (!userAge) {
-      alert('Please fill Age');
-      return;
-    }
-    if (!userPassword) {
-      alert('Please fill Password');
-      return;
-    }
-    //Show Loader
-    setLoading(true);
-   
-    var name= userName
-    var email= userEmail
-    var age= userAge
-    var password= userPassword
+class SignupScreen extends Component {
     
-    
-    //for (var key in dataToSend) {
-      //var encodedKey = encodeURIComponent(key);
-      //var encodedValue = encodeURIComponent(dataToSend[key]);
-      //formBody.push(encodedKey + '=' + encodedValue);
-    //}
-    //formBody = formBody.join('&');
-    let headers = new Headers();
+    constructor(props) {
+        super(props);
 
-    headers.append("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-    headers.append("Accept", "*/*");
-    headers.append("Access-Control-Allow-Origin","*")
-
-    const  data = new FormData()
-    data.append(name,userName)
-    data.append(email,userEmail)
-    data.append(age,userAge)
-    data.append(password,userPassword)
-    let dataToSend = {name:userName,email: userEmail, age:userAge, password: userPassword};
-    let formBody = [];
-    for (let key in dataToSend) {
-      let encodedKey = encodeURIComponent(key);
-      let encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
-    fetch('http://localhost:3000/api/users', {
-      
-      method: "POST",
-      mode:"no-cors",
-      headers: headers,
-      body: JSON.stringify(formBody)
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //Hide Loader
-        setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status === 'success') {
-          setIsRegistraionSuccess(true);
-          console.log(
-            'Registration Successful. Please Login to proceed'
-          );
-        } else {
-          setErrortext(responseJson.msg);
+        this.state = {
+            Email: '',
+            Password: '',
+            Name: ''
         }
-      })
-      
-      .catch((error) => {
-        //Hide Loader
-        setLoading(false);
-        console.error(error);
-      });
-      
-  };
-  if (isRegistraionSuccess) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: '#307ecc',
-          justifyContent: 'center',
-        }}>
-        <Image
-          //source={require('../Image/success.png')}
-          style={{
-            height: 150,
-            resizeMode: 'contain',
-            alignSelf: 'center'
-          }}
-        />
-        <Text style={styles.successTextStyle}>
-          Registration Successful
-        </Text>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('LoginScreen')}>
-          <Text style={styles.buttonTextStyle}>Login Now</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-  return (
-    <View style={{flex: 1}}>
-      <Loader loading={loading} />
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}>
-        <View style={{alignItems: 'center'}}>
-          <Image
-            source={require('../assets/seamzo.png')}
-            style={{
-              width: '100%',
-              height: 400,
-              resizeMode: 'contain',
-              margin: 30,
-            }}
-          />
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <Image
-              source={require('../assets/coins.png')}
-              style={{
-                width: '100%',
-                height: 200,
-                resizeMode: 'contain',
-                marginTop:1,
-                bottom:450
-              }}
-            />
-        </View>
-        <KeyboardAvoidingView enabled>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserName) => setUserName(UserName)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Name"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize="sentences"
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                emailInputRef.current && emailInputRef.current.focus()
-              }
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Email"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="email-address"
-              ref={emailInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                passwordInputRef.current &&
-                passwordInputRef.current.focus()
-              }
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserPassword) =>
-                setUserPassword(UserPassword)
-              }
-              underlineColorAndroid="#f000"
-              placeholder="Enter Password"
-              placeholderTextColor="#8b9cb5"
-              ref={passwordInputRef}
-              returnKeyType="next"
-              secureTextEntry={true}
-              onSubmitEditing={() =>
-                ageInputRef.current &&
-                ageInputRef.current.focus()
-              }
-              blurOnSubmit={false}
-            />
-          </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserAge) => setUserAge(UserAge)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Age"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="numeric"
-              ref={ageInputRef}
-              returnKeyType="next"
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            activeOpacity={0.5}
-            onPress={handleSubmitButton}>
-            <Text style={styles.buttonTextStyle}>REGISTER</Text>
-          </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </ScrollView>
-    </View>
-  );
-};
-export default RegisterScreen;
+
+        this.onSignUp = this.onSignUp.bind(this)
+    }
+
+    // The signup function that passes the input material of necessary items, for the database
+    // First step of the authentication process
+
+    onSignUp() {
+        const { Email, Password, Name } = this.state;
+
+        // Firebase authenticator function
+        firebase.auth().createUserWithEmailAndPassword(Email, Password)
+            .then((result) => {
+                firebase.firestore().collection("users")
+                    .doc(firebase.auth().currentUser.uid)
+                    .set({
+                        Name,
+                        Email
+                    })
+
+                console.log(result)
+
+                // Just a console log to check the database
+                console.log(firebase.firestore().collection("users"))
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
+
+    render() {
+        return (
+            
+            <View style={styles.mainBody}>
+
+                <View style={{alignItems: 'center'}}>
+                    <Image
+                        source={require('../../assets/coins.png')}
+                        style={{
+                        width: 350,
+                        height: 350,
+                        resizeMode: 'contain',
+                        }} 
+                    />
+                </View>
+                
+                <KeyboardAvoidingView enabled>
+                <View style={styles.SectionStyle}>
+                    <TextInput
+                    style={styles.inputStyle}
+                    onChangeText={(Name) => this.setState({Name})}
+                    underlineColorAndroid="#f000"
+                    placeholder="Enter Name"
+                    placeholderTextColor="#8b9cb5"
+                    autoCapitalize="sentences"
+                    blurOnSubmit={false}
+                    />
+                </View>
+                <View style={styles.SectionStyle}>
+                    <TextInput
+                    style={styles.inputStyle}
+                    onChangeText={(Email) => this.setState({Email})}
+                    underlineColorAndroid="#f000"
+                    placeholder="Enter Email"
+                    placeholderTextColor="#8b9cb5"
+                    keyboardType="email-address"
+                    blurOnSubmit={false}
+                    />
+                </View>
+                <View style={styles.SectionStyle}>
+                    <TextInput
+                    style={styles.inputStyle}
+                    onChangeText={(Password) => this.setState({Password})}
+                    underlineColorAndroid="#f000"
+                    placeholder="Enter Password"
+                    placeholderTextColor="#8b9cb5"
+                    returnKeyType="next"
+                    secureTextEntry={true}
+                    blurOnSubmit={false}
+                    />
+                </View>
+                
+                
+                <TouchableOpacity
+                    style={styles.buttonStyle}
+                    activeOpacity={0.5}
+                    onPress={() => this.onSignUp()}>
+                    <Text style={styles.buttonTextStyle}>REGISTER</Text>
+                </TouchableOpacity>
+                </KeyboardAvoidingView>
+            </View>
+        );
+    }
+}
+
+export default SignupScreen
 
 const styles = StyleSheet.create({
-  SectionStyle: {
-    flexDirection: 'row',
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-    bottom:400
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  buttonStyle: {
+
+  mainBody: {
+      backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center"
+  },
+ 
+  image: {
+    marginBottom: 40,
+  },
+ 
+  inputView: {
+    backgroundColor: "#dadae8",
+    borderRadius: 30,
+    width: "70%",
+    height: 45,
+    marginBottom: 20,
+ 
+    alignItems: "center",
+  },
+ 
+  TextInput: {
+    height: 50,
+    flex: 1,
+    padding: 10,
+    marginLeft: 20,
+  },
+ 
+  forgot_button: {
+    height: 30,
+    marginBottom: 30,
+  },
+ 
+  loginBtn: {
+    width: "80%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    backgroundColor: "#FF1493",
+  },
+  SectionStyle: {
+    height: 45,
+    
+    marginBottom: 20,
+  },
+ buttonStyle: {
     backgroundColor: '#7DE24E',
     borderWidth: 0,
     color: '#FFFFFF',
@@ -271,11 +182,8 @@ const styles = StyleSheet.create({
     height: 40,
     alignItems: 'center',
     borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 20,
-    bottom:400
+    marginTop: 40,
+    
   },
   buttonTextStyle: {
     color: '#FFFFFF',
