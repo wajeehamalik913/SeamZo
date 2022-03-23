@@ -1,27 +1,23 @@
+import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import {Text, Image, ImageBackground, StyleSheet, View, Link, Button } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {Text, Image, ImageBackground, StyleSheet, View } from "react-native";
 
-
-const LoginPage = ({ navigation }) => {
-
+function LoginPage(props) {
     return(
-        <SafeAreaView >
-            
-            <Image style={styles.logo_image} source = {require("../assets/coins.png")} />
-            <Image style={styles.logo} source = {require("../assets/seamzo.png")} />
-            <View style={styles.fixToText}>
-                <Button
-                title="Signup"
-                color="#f194ff"
-                onPress={() => navigation.navigate('SignupPage')}
-                />
-            </View>
-        </SafeAreaView>
+     <ImageBackground
+        style= {styles.background}
+        source= {require("../assets/bitcoin.png")}>
+         <Image 
+            style = {styles.logo} source = {require("../assets/seamzo.png")} />
+         <View style = {styles.loginButton}>
+             <Text style = {styles.textLogin} >
+                 Login
+             </Text>
+         </View>
 
-        
-       
-         );
+     </ImageBackground>
+
+    );
 }
 
 const styles = StyleSheet.create({
@@ -29,74 +25,28 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-end",
         alignItems: "center",
+        
     },
     loginButton: {
-        
         width: "30%",
-        height: 10,
-
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 10,
-        bottom: 100,
-    },
-    inputButton: {
-        width: "70%",
         height: 40,
-        backgroundColor: "white",
+        backgroundColor: "seagreen",
+        alignItems: "center",
+        bottom: 50,
         justifyContent: "center",
-        //alignItems: "center",
-        borderRadius: 20,
-        bottom: 300,
-        marginVertical: 10,
-        borderColor: "black",
-        borderWidth: 3
+        borderRadius: 25,
     },
     logo: {
-        width: 350,
-        height: 350,
-        
-        alignItems: "center",
-        bottom: 200,
-    },
-    logo_image: {
-        justifyContent: 'center',
-        width: 250,
-        height: 200,
-        alignItems: "center",
-        bottom: 0,
+        width: 500,
+        height: 500,
+        position: "absolute",
+        top: 110,
     },
     textLogin:{
         fontWeight: 'bold',
-       
         fontSize: 18,
         justifyContent: "center",
-    },
-    fixToText: {
-        //flexDirection: 'column',
-        marginHorizontal: 20,
-        justifyContent: 'space-between',
-        //alignItems: "center",
-        bottom: 50,
-    },
-    container: {
-    //display: "flex",
-    flex:1,
-    justifyContent: 'center',
-    //marginHorizontal: 16,
-    //flexDirection: "column",
-    //justifyContent: "space-evenly",
-    alignItems: "center",
-    //height: "100%",
-    textAlign: "center"
-    },
-    textInput:{
-        fontWeight: 'bold',
-        marginHorizontal: 20,
-        fontSize: 18,
-        
     }
-
 });
 
 export default LoginPage;
