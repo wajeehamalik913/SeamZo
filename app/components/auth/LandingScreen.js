@@ -40,7 +40,7 @@ function LandingScreen  ({navigation}){
       <TouchableOpacity
               style={styles.buttonStyle}
               activeOpacity={0.5}
-              onPress={() => navigation.navigate("SignupScreen")} >
+              onPress={() => navigation.navigate("UalRenderer")} >
               <Text style={styles.buttonTextStyle}>SignUp Now</Text>
         </TouchableOpacity>
        <TouchableOpacity

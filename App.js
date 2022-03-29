@@ -79,6 +79,7 @@ render() {
             <Stack.Screen name="LandingScreen" component={Landing} options={{ headerShown: false }} />
             <Stack.Screen name="LoginScreen" component={Login} />
             <Stack.Screen name="SignupScreen" component={Signup} />
+            <Stack.Screen name="UalRenderer" component={UalRenderer} />
             
           </Stack.Navigator>
         </NavigationContainer>
