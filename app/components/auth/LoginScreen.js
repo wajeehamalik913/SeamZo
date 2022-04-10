@@ -5,7 +5,7 @@ import { View, Button, Text,ScrollView, Image,TextInput ,StyleSheet, TouchableOp
 import firebase from 'firebase'
 
 console.log("Sign in Called");
-class LoginScreen extends Component {
+class LoginScreen extends Component  {
     
     constructor(props) {
         super(props);
@@ -27,6 +27,7 @@ class LoginScreen extends Component {
             .catch((error) => {
                 console.log(error)
             })
+            //props.navigate("AddPost")
     }
     
     render() {

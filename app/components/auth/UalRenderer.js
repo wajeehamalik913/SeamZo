@@ -1,19 +1,186 @@
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
 import { Anchor } from 'ual-anchor'
 import { Ledger } from 'ual-ledger'
-
+import { Scatter } from 'ual-scatter'
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
-const { Api, JsonRpc } = require('eosjs');
+
 const chains = [{
-  chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
-  name: 'Local TestNet',
-  rpcEndpoints: [{ protocol: "http", host: "localhost", port: "8888"}]
-
-
+  chainId: '0db13ab9b321c37c0ba8481cb4681c2788b622c3abfd1f12f0e5353d44ba6e72',
+  name: 'Block.one Testnet',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'api.testnet.eos.io',
+    port: 443,
+  }]
+},{
+  chainId: 'b20901380af44ef59c5918439a1f9a41d83669020319a80574b804a5f95cbd7e',
+  name: 'FIO (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'fiotestnet.greymass.com',
+    port: 443,
+  }]
+},{
+  chainId: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
+  name: 'Jungle 2 (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'jungle.greymass.com',
+    port: 443,
+  }]
+},{
+  chainId: '2a02a0053e5a8cf73a56ba0fda11e4d92e0238a4a2aa74fccf46d5a910746840',
+  name: 'Jungle 3 (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'jungle3.greymass.com',
+    port: 443,
+  }]
+},{
+  chainId: 'f11d5128e07177823924a07df63bf59fbd07e52c44bc77d16acc1c6e9d22d37b',
+  name: 'Lynx (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'lynxtestnet.greymass.com',
+    port: 443,
+  }]
+},{
+  chainId: '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f',
+  name: 'Telos (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'testnet.eos.miami',
+    port: 443,
+  }]
+},{
+  chainId: 'f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12',
+  name: 'WAX (Testnet)',
+  rpcEndpoints: [{
+    protocol: 'https',
+    host: 'waxtestnet.greymass.com',
+    port: 443,
+  }]
 }]
 
+const getActionData = (actor, permission, chainId) => {
+  // default data
+  let data = {
+    from: actor,
+    to: 'teamgreymass',
+    quantity: getTransactionAmount(chainId),
+    memo: 'ual-anchor-demo'
+  }
+  switch (chainId) {
+    case '0db13ab9b321c37c0ba8481cb4681c2788b622c3abfd1f12f0e5353d44ba6e72': {
+      data = {
+        from: actor,
+        to: 'csxdbqrkklmm',
+        quantity: getTransactionAmount(chainId),
+        memo: 'ual-anchor-demo'
+      }
+      break
+    }
+    case 'b20901380af44ef59c5918439a1f9a41d83669020319a80574b804a5f95cbd7e': {
+      data = {
+        payee_public_key: 'FIO6smr7ThQMWYBHzEvkzTZdxNNmUwxqh2VXdXZdDdzYHgakgqCeb',
+        amount: getTransactionAmount(chainId),
+        max_fee: 2000000000,
+        actor,
+        tpid: null,
+      }
+      break
+    }
+  }
+  return data
+}
+
+const getContractData = (chainId) => {
+  // default contract/action
+  let account = 'eosio.token'
+  let name = 'transfer'
+  switch (chainId) {
+    case 'b20901380af44ef59c5918439a1f9a41d83669020319a80574b804a5f95cbd7e': {
+      account = 'fio.token'
+      name = 'trnsfiopubky'
+      break
+    }
+  }
+  return { account, name }
+}
+
+const getActions = (actor, permission, chainId) => {
+  const { account, name } = getContractData(chainId)
+  const data = getActionData(actor, permission, chainId)
+  return {
+    actions: [
+      {
+        account,
+        name,
+        authorization: [{ actor, permission }],
+        data,
+      }
+    ],
+  }
+}
+
+const getTransaction = async (activeUser, actor, permission, chainId) => {
+  const { account, name } = getContractData(chainId)
+  const data = getActionData(actor, permission, chainId)
+  const actions = [{
+    account,
+    name,
+    authorization: [{ actor, permission }],
+    data,
+  }]
+  const info = await activeUser.rpc.get_info()
+  const height = info.last_irreversible_block_num - 3
+  const blockInfo = await activeUser.rpc.get_block(height)
+  const timePlus = new Date().getTime() + (60 * 1000)
+  const timeInISOString = (new Date(timePlus)).toISOString()
+  const expiration = timeInISOString.substr(0, timeInISOString.length - 1)
+  return {
+    actions,
+    context_free_actions: [],
+    transaction_extensions: [],
+    expiration,
+    ref_block_num: blockInfo.block_num & 0xffff,
+    ref_block_prefix: blockInfo.ref_block_prefix,
+    max_cpu_usage_ms: 0,
+    max_net_usage_words: 0,
+    delay_sec: 0,
+  }
+}
+
+const getTransactionAmount = (chainId) => {
+  let symbol = 'EOS'
+  let quantity = '0.0001'
+  switch (chainId) {
+    case '0db13ab9b321c37c0ba8481cb4681c2788b622c3abfd1f12f0e5353d44ba6e72': {
+      symbol = 'TNT'
+      break
+    }
+    case 'f11d5128e07177823924a07df63bf59fbd07e52c44bc77d16acc1c6e9d22d37b': {
+      symbol = 'LNX'
+      quantity = '0.00000001'
+      break
+    }
+    case '1eaa0824707c8c16bd25145493bf062aecddfeb56c736f6ba6397f3195f33c9f': {
+      symbol = 'TLOS'
+      break
+    }
+    case 'f16b1833c747c43682f4386fca9cbb327929334a762755ebec17f6f23c9b8a12': {
+      symbol = 'WAX'
+      quantity = '0.00000001'
+      break
+    }
+    case 'b20901380af44ef59c5918439a1f9a41d83669020319a80574b804a5f95cbd7e': {
+      return parseInt(0.00000001, 10)
+    }
+  }
+  return `${quantity} ${symbol}`
+}
 // const getActionData = (actor, permission, chainId) => {
 //   // default data
 //   let data = {
@@ -158,15 +325,15 @@ class TestApp extends Component {
       if (!requestPermission && activeUser.scatter) {
         requestPermission = activeUser.scatter.identity.accounts[0].authority
       }
-  //     const demoActions = getActions(accountName, requestPermission, chainId)
-  //     const result = await activeUser.signTransaction(demoActions, { expireSeconds: 120, blocksBehind: 3 })
-  //     this.setState({
-  //       message: `Transfer Successful!`,
-  //     }, () => {
-  //       setTimeout(this.resetMessage, 5000)
-  //     })
-  //     console.info('SUCCESS:', result)
-   } catch (e) {
+      const demoActions = getActions(accountName, requestPermission, chainId)
+      const result = await activeUser.signTransaction(demoActions, { expireSeconds: 120, blocksBehind: 3 })
+      this.setState({
+        message: `Transfer Successful!`,
+      }, () => {
+        setTimeout(this.resetMessage, 5000)
+      })
+      console.info('SUCCESS:', result)
+    } catch (e) {
       console.error('ERROR:', e)
     }
   }
@@ -218,9 +385,8 @@ class TestApp extends Component {
     return (activeUser) ? this.renderLoggedInView() : this.renderLoginButton()
   }
 }
-const TestAppConsumer = withUAL(TestApp)
 
-class UalRenderer extends Component {
+class UALWrapper extends Component {
   constructor(props) {
     super(props)
     const search = window.location.search
@@ -245,8 +411,6 @@ class UalRenderer extends Component {
       appName: 'ual-anchor-demo',
       // Optional: define your own endpoint or eosjs JsonRpc client
       // rpc: new JsonRpc('https://jungle.greymass.com'),
-      rpc: new JsonRpc(`${chains[0].rpcEndpoints.protocol}://
-   ${chains[0].rpcEndpoints.host}: ${chains[0].rpcEndpoints.port}`),
       // Optional: define API for session management, defaults to cb.anchor.link
       service: 'https://cb.anchor.link'
     })
@@ -331,8 +495,11 @@ const styles = {
   },
 }
 
+const TestAppConsumer = withUAL(TestApp)
 
-
+const UalRenderer = () => (
+  <UALWrapper available={chains} />
+)
 
 
 export default UalRenderer

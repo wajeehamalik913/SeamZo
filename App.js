@@ -90,7 +90,7 @@ render() {
       <NavigationContainer >
           <Stack.Navigator initialRouteName="BottomTabNavigator">
             <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
-            <Stack.Screen name="UalRenderer" component = {UalRenderer} navigation={this.props.navigation} />
+            {/* <Stack.Screen name="UalRenderer" component = {UalRenderer} navigation={this.props.navigation} /> */}
             <Stack.Screen name="AddPost" component = {Add} navigation={this.props.navigation} />
             <Stack.Screen name="Upload" component = {Upload} navigation= {this.props.navigation} />
             
