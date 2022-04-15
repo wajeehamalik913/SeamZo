@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Anchor } from 'ual-anchor'
+import { JsonRpc } from 'eosjs'
 import { Ledger } from 'ual-ledger'
 import { Scatter } from 'ual-scatter'
 import { UALProvider, withUAL } from 'ual-reactjs-renderer'
@@ -15,12 +16,12 @@ const chains = [{
     port: 443,
   }]
 },{
-  chainId: 'b20901380af44ef59c5918439a1f9a41d83669020319a80574b804a5f95cbd7e',
-  name: 'FIO (Testnet)',
-  rpcEndpoints: [{
-    protocol: 'https',
-    host: 'fiotestnet.greymass.com',
-    port: 443,
+  chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
+  name: 'Local TestNet',
+  rpcEndpoints: [{ 
+    protocol: "http", 
+    host: "localhost", 
+    port: "8888"
   }]
 },{
   chainId: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
@@ -410,7 +411,7 @@ class UALWrapper extends Component {
       // Required: The name of the app requesting a session
       appName: 'ual-anchor-demo',
       // Optional: define your own endpoint or eosjs JsonRpc client
-      // rpc: new JsonRpc('https://jungle.greymass.com'),
+      rpc: new JsonRpc('https://jungle.greymass.com'),
       // Optional: define API for session management, defaults to cb.anchor.link
       service: 'https://cb.anchor.link'
     })

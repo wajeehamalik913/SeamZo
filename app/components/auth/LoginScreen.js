@@ -27,6 +27,7 @@ class LoginScreen extends Component  {
             .catch((error) => {
                 console.log(error)
             })
+            
             //props.navigate("AddPost")
     }
     

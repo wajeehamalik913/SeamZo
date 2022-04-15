@@ -20,8 +20,6 @@ export default function Add({ navigation }) {
 
       const galleryStatus = await ImagePicker.requestCameraRollPermissionsAsync();
       setHasGalleryPermission(galleryStatus.status === 'granted');
-
-
     })();
   }, []);
 
