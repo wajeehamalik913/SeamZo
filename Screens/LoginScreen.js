@@ -9,15 +9,15 @@ const LoginScreen = () => {
 
   const navigation = useNavigation()
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.replace("Home")
-      }
-    })
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged(user => {
+  //     if (user) {
+  //       navigation.replace("Home")
+  //     }
+  //   })
 
-    return unsubscribe
-  }, [])
+  //   return unsubscribe
+  // }, [])
 
   const handleSignUp = () => {
     auth
@@ -25,6 +25,7 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Registered with:', user.email);
+        navigation.replace("Home")
       })
       .catch(error => alert(error.message))
   }
@@ -35,6 +36,7 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
+        navigation.replace("Home")
       })
       .catch(error => alert(error.message))
   }

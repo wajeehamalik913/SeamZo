@@ -15,6 +15,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Container,} from '../styles/HomeStyles';
 
 import PostCard from '../components/PostCard';
+function mHash() {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < 5; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * 
+charactersLength));
+ }
+ return result.toUpperCase();
+}
 
 const Posts = [
   {
@@ -25,6 +35,7 @@ const Posts = [
     post:
       'Hey there, Kepp up!!',
     postImg: require('../assets/posts/post-img-3.jpg'),
+    symbol: mHash(),
     liked: true,
     likes: '14',
     comments: '5',
@@ -36,7 +47,8 @@ const Posts = [
     postTime: '2 hours ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
+    postImg: require('../assets/users/user-3.jpg'),
+    symbol: mHash(),
     liked: false,
     likes: '8',
     comments: '0',
@@ -49,6 +61,7 @@ const Posts = [
     post:
       'A long way to go.',
     postImg: require('../assets/posts/post-img-2.jpg'),
+    symbol:mHash(),
     liked: true,
     likes: '1',
     comments: '0',
@@ -61,6 +74,7 @@ const Posts = [
     post:
       'A beautiful evening!!!',
     postImg: require('../assets/posts/post-img-4.jpg'),
+    symbol:mHash(),
     liked: true,
     likes: '22',
     comments: '4',
@@ -72,7 +86,8 @@ const Posts = [
     postTime: '2 days ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: 'none',
+    postImg: require('../assets/posts/post-img-5.jpg'),
+    symbol:mHash(),
     liked: false,
     likes: '0',
     comments: '0',
