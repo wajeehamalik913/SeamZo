@@ -13,150 +13,107 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
+import * as Animatable from 'react-native-animatable';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '@react-navigation/native';
+
 import Loader from '../Loader.js';
 
+
+
+
+
 function LandingScreen  ({navigation}){
-  
-  return (
-    <View style = {styles.mainBody} >
-     <Image style={{
-            resizeMode: "contain",
-            marginTop:50,
-            height: 300,
-            width: 300}} 
-            source = {require('../../assets/coins.png')} />
+      const { colors } = useTheme();
+      return (
     
-     <Image style={{
-            resizeMode: "contain",
-            height: 400,
-            marginTop:1,
-            bottom:180,
-            width: 400}} 
-            source = {require('../../assets/seamzo.png')} />
+      <View style={styles.body}>
+            <View style = {styles.header}>
+                  <Animatable.Image 
+                        animation="bounceIn"
+                        duraton="2000"
+                  source = {require ("../../assets/seamzo.png")}
+                  style = {styles.logo}
+                  resizeMode = 'stretch'
+                  />
+            </View>
+             <Animatable.View 
+                  style={[styles.footer, {
+                  backgroundColor: colors.background
+                  }]}
+                  animation="fadeInUpBig"
+        >
+            <Text style={[styles.title, {color: colors.text}]}>NFT Social Media Platform!</Text>
+            <Text style={styles.text}>Sign in with account</Text>
+            <View style={styles.button}>
+            <TouchableOpacity onPress={()=> navigation.navigate('LoginScreen')}>
+                    <Text style={styles.textSign}>Get Started</Text>
+                    <MaterialIcons 
+                        name="navigate-next"
+                        color="#fff"
+                        size={20}
+                    />
+            </TouchableOpacity>
+            </View>
+            </Animatable.View>
+      </View>
 
-    <View style={styles.simpleHeader}>
-
-          </View>
-      <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={() => navigation.navigate("SignupScreen")} >
-              <Text style={styles.buttonTextStyle}>SignUp Now</Text>
-        </TouchableOpacity>
-       <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={() => navigation.navigate("LoginScreen")} >
-              <Text style={styles.buttonTextStyle}>Login Now</Text>
-        </TouchableOpacity>
-              
-
-      <TouchableOpacity>
-         <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-
-    </View>
-
-        
-    
-
-    
-  );
+      );
 };
 export default LandingScreen;
 
 const styles = StyleSheet.create({
-  mainBody: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center"
-  },
-  simpleHeader: {
-    flex: 1
-    
-  },  
+      body: {
+            flex: 1,
+            backgroundColor: '#D3D3D3',
+      },
+      header: {
+            flex: 2,
+            justifyContent: 'center',
+            alignContent: 'center',
+      },
 
-  heading :{
-    fontSize:30,
-    fontWeight: 'bold',
-    justifyContent: 'center',
-    alignContent: 'center'
-  },
-  SectionStyle: {
-    flexDirection: 'row',
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-  registerButton: {
-    flexDirection: 'row',
-    color: "black",
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-  loginButton: {
-    flexDirection: 'row',
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-  coinsImage: {
-        flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  buttonStyle: {
-    backgroundColor: '#7DE24E',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 25,
-    bottom:100
-    
-  },
-  
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal: 40,
-    fontSize: 16,
-  },
-  inputStyle: {
-    flex: 1,
-    color: 'white',
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderWidth: 1,
-    borderRadius: 30,
-    borderColor: '#dadae8',
-  },
-  registerTextStyle: {
-    color: 'black',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    fontSize: 14,
-    alignSelf: 'center',
-    padding: 10,
-  },
-  errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
-    fontSize: 14,
-  },
+      footer: {
+            flex: 1,
+            backgroundColor: '#fff',
+            borderTopLeftRadius:30,
+            borderTopRightRadius: 30,
+            paddingVertical: 50,
+            paddingHorizontal: 30,
+      },
+
+      logo: {
+            width: 400,
+            height: 400,
+      },  
+
+      tinyLogo: {
+            width: 500,
+            height: 500,
+      },
+      title: {
+            color: '#05375a',
+            fontSize: 30,
+            fontWeight: 'bold'
+      },
+      text: {
+            color: 'grey',
+            marginTop:5
+      },
+      button: {
+            alignItems: 'flex-end',
+            marginTop: 30
+      },
+      signIn: {
+            width: 150,
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 50,
+            flexDirection: 'row'
+      },
+      textSign: {
+            color: 'white',
+            fontWeight: 'bold'
+      }        
 });

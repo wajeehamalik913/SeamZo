@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, FlatList, Button, TouchableOpacity} from 'react-native'
-import { connect } from 'react-redux'
+import {  ScrollView, StyleSheet, View, Text, Image, TextInput, Dimension, FlatList, Button, StatusBar,  TouchableOpacity } from 'react-native'
 
+import { connect } from 'react-redux'
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import firebase from 'firebase'
+import { SafeAreaView } from 'react-native-safe-area-context'
 require('firebase/firestore')
 
 function Profile(props) {
@@ -100,44 +102,78 @@ function Profile(props) {
         firebase.auth().signOut();
     }
     
-    console.log(userPosts)
-    console.log(props.route.params.uid.Name)
+    //console.log(userPosts)
+    
+//     console.log(props.route.params.uid.Name)
 
         
       return (
-            <View style={styles.container}>
             
-            <View
-                style={styles.containerImage}>
-                <View style={styles.nameContainer} >
-                    <Image source={{uri:"https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"}} style={{height:50, width:50, borderRadius:100}} />    
-                    <Text style={{paddingLeft:10}}>Jon Voe</Text>
-                </View>
-            </View>
+            <SafeAreaView style={styles.container}>
             
-                     
-            <View style={styles.containerGallery}>
-                <FlatList
-                    numColumns={3}
-                    horizontal={false}
-                    data={userPosts}
-                    renderItem={({ item }) => (
-                        
-                        <View
-                            style={styles.containerImage}>
+            {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+                  <View style = {styles.titleBar}>
+                        <Ionicons name = "ios-arrow-back" size = {24} color = "#52575D"></Ionicons>
+                  </View>
 
-                            <Image
-                                style={styles.image}
-                                source={{ uri: item.downloadURL }}
-                            />
+                  <View style={{ alignSelf: "center" }}>
+
+                        <View style={styles.profileImage}>
+                              <Image source={require("../../assets/profile-pic.jpg")} style={styles.image} resizeMode="center"></Image>
                         </View>
+                  
+                        <View style={styles.active}></View>
 
-                    )}
+                        <View style={styles.add}>
+                              <Ionicons name="ios-add" size={20} color="#DFD8C8" style={{ marginTop: 6, marginLeft: 2 }}></Ionicons>
+                        </View>
+                  </View>
 
-                />
-            </View>
+                  <View style={styles.infoContainer}>
+                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Nathan Andrews</Text>
+                        <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Photographer</Text>
+                  </View>
 
-            <View style={styles.containerInfo}>
+                  <View style={styles.statsContainer}>
+                        <View style={styles.statsBox}>
+                              <Text style={[styles.text, { fontSize: 24 }]}>483</Text>
+                              <Text style={[styles.text, styles.subText]}>Posts</Text>
+                        </View>
+                        <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
+                              <Text style={[styles.text, { fontSize: 24 }]}>45,844</Text>
+                              <Text style={[styles.text, styles.subText]}>Followers</Text>
+                        </View>
+                        <View style={styles.statsBox}>
+                              <Text style={[styles.text, { fontSize: 24 }]}>302</Text>
+                              <Text style={[styles.text, styles.subText]}>Following</Text>
+                        </View>
+                  </View>
+                  
+            {/* </ScrollView> */}
+                  <View style={styles.containerGallery}>
+                        <FlatList
+                              numColumns={3}
+                              horizontal={false}
+                              data={userPosts}
+                              renderItem={({ item }) => (
+                                    
+                                    <View style={styles.mediaImageContainer}>
+
+                                          <Image
+                                                style={styles.imagePost}
+                                                resizeMode="contain"
+                                                source={{ uri: item.downloadURL }}
+                                                
+                                          />
+                                          <Text>GEkii</Text>
+                                    </View>
+                                    
+                              )}
+                        />
+                  </View>
+            
+
+            {/* <View style={styles.containerInfo}>
 
                 {props.route.params.uid !== firebase.auth().currentUser.uid ? (
                     <View>
@@ -157,8 +193,9 @@ function Profile(props) {
                     <TouchableOpacity style={styles.buttonStyle} onPress={() => onLogout()}>
                       <Text style={styles.buttonTextStyle}>LOGOUT</Text>
                   </TouchableOpacity>}
-            </View>
-        </View>
+            </View> */}
+        </SafeAreaView>
+        
       )
 }
 
@@ -167,83 +204,201 @@ function Profile(props) {
 
 const styles = StyleSheet.create({
 
-    logoutButton: {
-       
-        backgroundColor: '#7DE24E',
-        borderWidth: 0,
-        color: '#FFFFFF',
-        borderColor: '#7DE24E',
-        height: 40,
-        alignItems: 'center',
-        borderRadius: 30,
-        marginTop: 40,
+      logoutButton: {
+            
+            backgroundColor: '#7DE24E',
+            borderWidth: 0,
+            color: '#FFFFFF',
+            borderColor: '#7DE24E',
+            height: 40,
+            alignItems: 'center',
+            borderRadius: 30,
+            marginTop: 40,
 
-    },
+      },
 
-    userText: {
-        fontSize: 30
-    }, 
-    
-    
-    buttonStyle: {
-    backgroundColor: 'red',
-    borderWidth: 0,
-    opacity:0.7,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginTop: 20,
-    
-  },
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal:20,
-    fontSize: 16,
-  },
+      userText: {
+            fontSize: 30
+      }, 
+      
+      
+      buttonStyle: {
+      backgroundColor: 'red',
+      borderWidth: 0,
+      opacity:0.7,
+      color: '#FFFFFF',
+      borderColor: '#7DE24E',
+      height: 40,
+      alignItems: 'center',
+      borderRadius: 30,
+      marginTop: 20,
+      
+      },
+      buttonTextStyle: {
+      color: '#FFFFFF',
+      paddingVertical: 10,
+      paddingHorizontal:20,
+      fontSize: 16,
+      },
 
-    container: {
-        flex: 1,
-    },
+      
+      
+      containerImage: {
+            flex: 1,
+            resizeMode: 'contain',
+            flexDirection: 'column',
+            justifyContent:'center',
+            paddingHorizontal: 5,
+            alignItems: 'center'
+      },
+
+      imagePost : {
+            flex: 1,
+            height:150,
+            width: 150,
+      },
 
 
-    
-    containerImage: {
-        flex: 1,
-        resizeMode: 'contain',
-        flexDirection: 'column',
-        justifyContent:'center',
-        paddingHorizontal: 5,
-        alignItems: 'center'
-    },
-    containerInfo: {
-        margin: 20
-    },
-    containerGallery: {
-        flex: 1
-    },
-    nameContainer: {
-        flexDirection: 'row',
-        paddingVertical: 10,
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
-    interactionContainer: {
-        justifyContent:'center',
-        paddingVertical: 2,
-        display: 'flex',
-        flexDirection: 'row'
-    },
-    containerImage: {
-        flex: 1 / 3
+      containerInfo: {
+            margin: 20
+      },
 
-    },
-    image: {
-        flex: 1,
-        aspectRatio: 1 / 1
-    }
+
+      containerGallery: {
+            flex: 1
+      },
+
+
+      nameContainer: {
+            flexDirection: 'row',
+            paddingVertical: 10,
+            alignItems: 'center',
+            paddingHorizontal: 10,
+      },
+      interactionContainer: {
+            justifyContent:'center',
+            paddingVertical: 2,
+            display: 'flex',
+            flexDirection: 'row'
+      },
+      containerImage: {
+            flex: 1 / 3
+
+      },
+
+      container: {
+            flex: 1,
+            backgroundColor: "#fff"
+      },
+      text: {
+            fontFamily: "HelveticaNeue",
+            color: "#52575D"
+      },
+      image: {
+            flex: 1,
+            height: undefined,
+            width: undefined
+      },
+      titleBar: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 24,
+            marginHorizontal: 16
+      },
+      subText: {
+            fontSize: 12,
+            color: "#AEB5BC",
+            textTransform: "uppercase",
+            fontWeight: "500"
+      },
+      profileImage: {
+            width: 100,
+            height: 100,
+            borderRadius: 100,
+            overflow: "hidden"
+      },
+
+      active: {
+            backgroundColor: "#34FFB9",
+            position: "absolute",
+            bottom: 28,
+            left: 10,
+            padding: 4,
+            height: 20,
+            width: 20,
+            borderRadius: 10
+      },
+      add: {
+            backgroundColor: "#41444B",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            width: 25,
+            height: 25,
+            borderRadius: 25,
+            alignItems: "center",
+            justifyContent: "center"
+      },
+      infoContainer: {
+            alignSelf: "center",
+            alignItems: "center",
+            marginTop: 16
+      },
+      statsContainer: {
+            flexDirection: "row",
+            alignSelf: "center",
+            marginTop: 32
+      },
+      statsBox: {
+            alignItems: "center",
+            flex: 1
+      },
+
+      mediaImageContainer: {
+            flex: 1,
+            resizeMode: 'contain',
+            flexDirection: 'column',
+            justifyContent:'center',
+            //paddingHorizontal: 5,
+            alignItems: 'center',
+            borderRadius: 12,
+      },
+      mediaCount: {
+            backgroundColor: "#41444B",
+            position: "absolute",
+            top: "50%",
+            marginTop: -50,
+            marginLeft: 30,
+            width: 80,
+            height: 80,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 12,
+            shadowColor: "rgba(0, 0, 0, 0.38)",
+            shadowOffset: { width: 0, height: 10 },
+            shadowRadius: 20,
+            shadowOpacity: 1
+      },
+      recent: {
+            marginLeft: 78,
+            marginTop: 32,
+            marginBottom: 6,
+            fontSize: 10
+      },
+      recentItem: {
+            flexDirection: "row",
+            alignItems: "flex-start",
+            marginBottom: 16
+      },
+      activityIndicator: {
+            backgroundColor: "#CABFAB",
+            padding: 4,
+            height: 12,
+            width: 12,
+            borderRadius: 6,
+            marginTop: 3,
+            marginRight: 20
+      }
 })
 
 const mapStateToProps = (store) => ({

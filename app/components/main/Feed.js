@@ -1,102 +1,151 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, FlatList, Button, TouchableOpacity } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet,Image, View, Text, media, TextInput, Dimension, FlatList, Button, StatusBar,  TouchableOpacity, RefreshControl } from 'react-native'
 
 import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
 
 function Feed(props) {
+
+    const [isLoading, setLoading] = useState(false)
+    const [listData, setListData] = useState([]);
+
     const [posts, setPosts] = useState([
-        require('../../assets/image1.jpg'),
-        require('../../assets/image2.jpg'),
-        require('../../assets/image3.jpg'),
-        require('../../assets/image4.jpg'),
-        require('../../assets/image5.jpg')
+        require('../../assets/media1.jpg'),
+        require('../../assets/media2.jpg'),
+        require('../../assets/media3.jpg'),
     ]);
 
     
     return (
-        <View style={styles.container}>
-            <View style={styles.containerGallery}>
-                <FlatList
-                    numColumns={1}
-                    horizontal={false}
-                    data={posts}
-                    ItemSeparatorComponent={() => (
-                        <View
-                        style={{height: 0.8, backgroundColor: "grey", opacity:0.5}}></View>
-                    )}
-                    renderItem={({ item }) => (
-                        <View
-                            style={styles.containerImage}>
-                            <View style={styles.nameContainer} >
-                                <Image source={{uri:"https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80"}} style={{height:50, width:50, borderRadius:100}} />    
-                                <Text style={{paddingLeft:10}}>Jon Voe</Text>
-                            </View>
-                            <Image
-                                style={styles.image}
-                                source={ item }
-                            />
-                            <View style = {styles.interactionContainer} > 
+        <SafeAreaView style = {styles.container}>
+            <FlatList
 
+                /* refreshControl={
+                    <RefreshControl refreshing={isLoading} onRefresh={async () => {
+                        setLoading(true)
+                        await fetchFeed()
+                        setLoading(false)
+                    }} />
+                } */
 
-                                {/*Like and comment buttons for display and later on functionality  */}
-                                <Button
-                                    title="Like"
-                                    onPress={() => onLikePress(item.user.uid, item.id)} />
+                numColumns={1}
+                horizontal={false}
+                data={posts}
+                keyExtractor={(item) => item.id}
+
+                renderItem={({ item }) => 
+
+                <View style={styles.flatlistContainer}>
                     
-                                <Button
-                                    onPress={() => props.navigation.navigate('Comment', {  })}
-                                    title="Comments"/>
-                            </View>
-                            
-                        </View>
+                    <View style={styles.profileHeader} >
 
-                    )}
+                        <Image 
+                            source= {require('../../assets/profile-pic.jpg')} 
+                            style={styles.profileImage} 
+                        />    
 
-                />
-            </View>
-        </View>
+                        <Text style={styles.profileText}>Clark Kent</Text>
 
-    )
+                    </View>
+
+                    <View>
+                        <Image
+                            style={styles.mediaImageContainer}
+                            resizeMode= 'center'
+                            source={ item }
+                        />
+                    </View>
+
+                    <View style={styles.interactionBar}>
+                        
+                        <TouchableOpacity style={styles.interactionButton}>
+                            <Text style={styles.interactionText}>Like</Text>
+                        </TouchableOpacity>
+
+                        <View style={styles.interactionMargin} />
+
+                        <TouchableOpacity style={styles.interactionButton}>
+                            <Text style={styles.interactionText}>Comment</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>}           
+            />
+
+        </SafeAreaView>
+      )
 }
 
-const styles = StyleSheet.create({
-    nameContainer: {
-        flexDirection: 'row',
-        paddingVertical: 10,
-        alignItems: 'center',
-        paddingHorizontal: 10,
-    },
-    interactionContainer: {
-        justifyContent:'center',
-        paddingVertical: 2,
-        display: 'flex',
-        flexDirection: 'row'
-    },
+
+
+const styles = StyleSheet.create ({
+
     container: {
         flex: 1,
+        backgroundColor: "#fff"
     },
-    containerInfo: {
-        margin: 20,
-        justifyContent: 'space-between',
+    
+    flatlistContainer: {
+        margin: 10, 
+        borderRadius: 7, 
+        elevation: 5,
+        backgroundColor: "white", 
+        shadowColor: '#333',               
+        shadowOffset: { width: 0, height: 1 },           
+        shadowOpacity: 0.5,              
+        shadowRadius: 2,
     },
-    containerGallery: {
-        flex: 1,
-        justifyContent: 'space-between',
+
+    profileHeader: {
+        flexDirection: "row", 
+        alignItems: "center", 
+        padding: 10,
+    },  
+
+    profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+
+        overflow: "hidden"
     },
-    containerImage: {
-        flex: 1,
-        resizeMode: 'contain',
-        flexDirection: 'column',
+
+    profileText: {
+        paddingLeft:10, 
+        fontSize:16
+    },
+
+    mediaImageContainer: {
+    
+        width: 340,
+        height: 300,
+        borderRadius: 6,
+        marginHorizontal: 10
+    },
+
+    interactionBar: {
         justifyContent:'center',
-        paddingHorizontal: 5
+        paddingVertical: 2,
+        flexDirection: 'row'
     },
-    image: {
+
+    interactionButton: {
         flex: 1,
-        aspectRatio: 1 / 1
-    }
-})
+        margin: 10 
+    },
+
+    interactionText: {
+        textAlign: "center", 
+        fontWeight: "bold"
+    },
+
+    interactionMargin: {
+        backgroundColor: "#3333", 
+        height: "100%", 
+        width: 1
+    },   
+});
 
 const mapStateToProps = (store) => ({
     currentUser: store.userState.currentUser,

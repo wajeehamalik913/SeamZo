@@ -17,31 +17,31 @@ export default function Search(props) {
             require('../../assets/image6.jpg'),
             require('../../assets/image7.jpg'),
             require('../../assets/image8.jpg')
-   ]);
+      ]);
 
 
-   const [users, setUsers] = useState([])
+      const [users, setUsers] = useState([])
 
 
-   // FetchUsers function as being called inside the redux store . actions.js
+      // FetchUsers function as being called inside the redux store . actions.js
 
    
-    const fetchUsers = (search) => {
-        firebase.firestore()
-            .collection('users')
-            .where('Name', '>=', search)
-            .get()
-            .then((snapshot) => {
-                let users = snapshot.docs.map(doc => {
-                    const data = doc.data();
-                    const id = doc.id;
-                    return { id, ...data }
-                });
-                setUsers(users);
-                console.log(users)
-            })
-        }
-        console.log(users)
+      const fetchUsers = (search) => {
+            firebase.firestore()
+                  .collection('users')
+                  .where('Name', '>=', search)
+                  .get()
+                  .then((snapshot) => {
+                        let users = snapshot.docs.map(doc => {
+                              const data = doc.data();
+                              const id = doc.id;
+                              return { id, ...data }
+                        });
+                        setUsers(users);
+                  })
+      }
+      console.log(users)
+      
       return (
             <View>
                   <Searchbar
@@ -81,6 +81,7 @@ export default function Search(props) {
                                     <Text styles = {styles.textBox}>
                                           
                                           {item.Name}</Text>
+                                    
 
                                     <Text styles = {styles.textBox}>
                                           
@@ -91,7 +92,7 @@ export default function Search(props) {
                   />
                   
             </View>
-            
+   
       )
 }
 

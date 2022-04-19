@@ -35,7 +35,7 @@ class SignupScreen extends Component {
                 firebase.firestore().collection("users")
                     .doc(firebase.auth().currentUser.uid)
                     .set({
-                        Name,
+                        displayName,
                         Email
                     })
 
