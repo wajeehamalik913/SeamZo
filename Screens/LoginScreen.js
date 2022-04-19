@@ -40,7 +40,10 @@ const LoginScreen = () => {
       })
       .catch(error => alert(error.message))
   }
-
+  const  handleAnchor = () => {
+    navigation.replace('Anchor')
+  }
+ 
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -74,6 +77,12 @@ const LoginScreen = () => {
           style={[styles.button, styles.buttonOutline]}
         >
           <Text style={styles.buttonOutlineText}>Register</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleAnchor}
+          style={[styles.button, styles.buttonOutline]}
+        >
+          <Text style={styles.buttonOutlineText}>Anchor Wallet</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

@@ -47,7 +47,7 @@ const Posts = [
     postTime: '2 hours ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
-    postImg: require('../assets/users/user-3.jpg'),
+    postImg: require('../assets/posts/post-img-1.jpg'),
     symbol: mHash(),
     liked: false,
     likes: '8',

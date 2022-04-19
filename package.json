@@ -26,7 +26,10 @@
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "save": "^2.4.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "ual-anchor": "^1.1.5",
+    "ual-ledger": "^0.3.0",
+    "ual-reactjs-renderer": "^0.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
