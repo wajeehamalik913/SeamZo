@@ -165,7 +165,6 @@ function Profile(props) {
                                                 source={{ uri: item.downloadURL }}
                                                 
                                           />
-                                          <Text>GEkii</Text>
                                     </View>
                                     
                               )}
@@ -173,7 +172,7 @@ function Profile(props) {
                   </View>
             
 
-            {/* <View style={styles.containerInfo}>
+            <View style={styles.containerInfo}>
 
                 {props.route.params.uid !== firebase.auth().currentUser.uid ? (
                     <View>
@@ -193,7 +192,7 @@ function Profile(props) {
                     <TouchableOpacity style={styles.buttonStyle} onPress={() => onLogout()}>
                       <Text style={styles.buttonTextStyle}>LOGOUT</Text>
                   </TouchableOpacity>}
-            </View> */}
+            </View>
         </SafeAreaView>
         
       )
