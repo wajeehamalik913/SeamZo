@@ -14,14 +14,15 @@ import firebase from "firebase/app"
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBSS_0MwUXbsob-msOHPw_cyAnuqx90Nh4",
-  authDomain: "seamzo.firebaseapp.com",
-  projectId: "seamzo",
-  storageBucket: "seamzo.appspot.com",
-  messagingSenderId: "872280386420",
-  appId: "1:872280386420:web:a1c8309b64c20139e95a21",
-  measurementId: "G-6PHYXKJ099"
+  apiKey: "AIzaSyDL6KQdNm_W3oKZLI3HoohrKB01Pv5UqL0",
+  authDomain: "seamzo-ee0cf.firebaseapp.com",
+  projectId: "seamzo-ee0cf",
+  storageBucket: "seamzo-ee0cf.appspot.com",
+  messagingSenderId: "350428953332",
+  appId: "1:350428953332:web:62f6002ab41a185ec07ca1",
+  measurementId: "G-2YNBH8RNF4"
 };
+
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
@@ -32,9 +33,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './app/components/BottomTabNavigator'
 import Add from './app/components/main/AddPost'
 import Upload from './app/components/main/Upload'
-import Landing from './app/components/auth/LandingScreen'
-import Login from './app/components/auth/LoginScreen'
-import Signup from './app/components/auth/SignupScreen'
+import LandingScreen from './app/components/auth/LandingScreen'
+import LoginScreen from './app/components/auth/LoginScreen'
+import SignupScreen from './app/components/auth/SignupScreen'
 
 const Stack = createStackNavigator();
 
@@ -75,9 +76,9 @@ render() {
       return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="LandingScreen">
-            <Stack.Screen name="LandingScreen" component={Landing} options={{ headerShown: false }} />
-            <Stack.Screen name="LoginScreen" component={Login} />
-            <Stack.Screen name="SignupScreen" component={Signup} />
+            <Stack.Screen name="LandingScreen" component={LandingScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="SignupScreen" component={SignupScreen} />
             
           </Stack.Navigator>
         </NavigationContainer>

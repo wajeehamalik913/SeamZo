@@ -1,29 +1,17 @@
-import { StatusBar } from "expo-status-bar";
+//import { StatusBar } from "expo-status-bar";
 
-
-import React, { Component,useState } from 'react'
-import { View, Button, Text,ScrollView, Image,TextInput ,StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView} from 'react-native'
+import React, { useState, Component} from 'react';
+import { View, Button, StatusBar, Text, Image,TextInput ,StyleSheet, KeyboardAvoidingView, TouchableOpacity} from 'react-native'
 import { useTheme } from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
+import firebase from 'firebase'
+import "firebase/firestore";
 import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-import firebase from 'firebase'
-
-
-const LoginScreen = () => {
+function LoginScreen (props) {
     
-//     constructor(props) {
-//         super(props);
-
-//         this.state = {
-//             email: '',
-//             password: '',
-//         }
-
-//         this.onSignIn = this.onSignIn.bind(this)
-//     }
       const [data, setData] = React.useState({
             username: '',
             password: '',
@@ -88,8 +76,9 @@ const LoginScreen = () => {
       }
     
     
-        return (
-            <View style={styles.container}>
+      return (
+            <View
+                  style={styles.container}>
                   <StatusBar backgroundColor='#009387' barStyle="light-content"/>
                   <View style={styles.header}>
                         <Text style={styles.text_header}>Welcome to SeamZo!</Text>
@@ -207,12 +196,10 @@ const LoginScreen = () => {
                         </View>
                   </Animatable.View>
             </View>
-        );
-    }     
+      );
+}     
 
-
-
-export default LoginScreen
+export default LoginScreen;
 
 
 const styles = StyleSheet.create({

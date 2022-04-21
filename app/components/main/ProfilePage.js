@@ -14,92 +14,102 @@ function Profile(props) {
       const [user, setUser] = useState(null);
       const [following, setFollowing] = useState(false)
       
-      console.log(firebase.auth().currentUser.uid)
     
         
-    useEffect(() => {
+      useEffect(() => {
 
-      const { currentUser, posts } = props;
+            const { currentUser, posts } = props;
 
+            // Checking if the user who has entered profile page matches with the argumented user
 
+            // So if it's different then a different route is being taken to show that specific user's posts
+            if (props.route.params.uid === firebase.auth().currentUser.uid) {
+                  setUser(currentUser)
+                  setUserPosts(posts)
+                  
+            } else {
+                  firebase.firestore()
+                  .collection("users")
+                  .doc(props.route.params.uid)
+                  .get()
+                  .then((snapshot) => {
+                        if (snapshot.exists) {
+                              setUser(snapshot.data());
+                              console.log('this happens too')
+                        }
+                        else {
+                              console.log('does not exist')
+                        }
+                  })
+
+                  // and then that user's posts are being fetched
+                  firebase.firestore()
+                  .collection("posts")
+                  .doc(props.route.params.uid)
+                  .collection("userPosts")
+                  .orderBy("creation", "asc")
+                  .get()
+                  .then((snapshot) => {
+                        let posts = snapshot.docs.map(doc => {
+                              const data = doc.data();
+                              const id = doc.id;
+                              return { id, ...data }
+                        })
+                        setUserPosts(posts)
+                  })
+            }
+
+            // Checking if this-> User is Following the Clicked Profile or not
             
-        // Checking if the user who has entered profile page matches with the argumented user
 
-        // So if it's different then a different route is being taken to show that specific user's posts
-        if (props.route.params.uid === firebase.auth().currentUser.uid) {
-            setUser(currentUser)
-            setUserPosts(posts)
-            console.log(user)
-            
-        } else {
-            firebase.firestore()
-                .collection("users")
-                .doc(props.route.params.uid)
-                .get()
-                .then((snapshot) => {
-                    if (snapshot.exists) {
-                        setUser(snapshot.data());
-                        console.log('this happens too')
-                    }
-                    else {
-                        console.log('does not exist')
-                    }
-                })
+            //This basically checks if the following user exists in the list of following 
+            if (props.following.indexOf(props.route.params.uid) > -1) {
+                  setFollowing(true);
+            } else {
+                  setFollowing(false);
+            }
 
-            // and then that user's posts are being fetched
-            firebase.firestore()
-                .collection("posts")
-                .doc(props.route.params.uid)
-                .collection("userPosts")
-                .orderBy("creation", "asc")
-                .get()
-                .then((snapshot) => {
-                    let posts = snapshot.docs.map(doc => {
-                        const data = doc.data();
-                        const id = doc.id;
-                        return { id, ...data }
-                    })
-                    setUserPosts(posts)
-                })
-        }
-
-        // Checking if this-> User is Following the Clicked Profile or not
-        
-        if (props.following.indexOf(props.route.params.uid) > -1) {
-            setFollowing(true);
-        } else {
-            setFollowing(false);
-        }
-
-    }, [props.route.params.uid, props.following])
+      }, [props.route.params.uid, props.following,props.currentUser, props.posts])
 
     
 
 
 
     // Functionality for the follow 
-    const onFollow = () => {
-        firebase.firestore()
-            .collection("following")
-            .doc(firebase.auth().currentUser.uid)
-            .collection("userFollowing")
-            .doc(props.route.params.uid)
-            .set({})
-    }
+      const onFollow = () => {
+            firebase.firestore()
+                  .collection("following")
+                  .doc(firebase.auth().currentUser.uid)
+                  .collection("userFollowing")
+                  .doc(props.route.params.uid)
+                  .set({})
+
+            firebase.firestore()
+                  .collection("users")
+                  .doc(firebase.auth().currentUser.uid)
+                  .update ( {} )
+      }
 
     // and unfollow button
-    const onUnfollow = () => {
-        firebase.firestore()
-            .collection("following")
-            .doc(firebase.auth().currentUser.uid)
-            .collection("userFollowing")
-            .doc(props.route.params.uid)
-            .delete()
-    }
+      const onUnfollow = () => {
+            firebase.firestore()
+                  .collection("following")
+                  .doc(firebase.auth().currentUser.uid)
+                  .collection("userFollowing")
+                  .doc(props.route.params.uid)
+                  .delete()
+      }
+
 
     // Logout button function triggering Firebase logout 
     const onLogout = () => {
         firebase.auth().signOut();
+    }
+
+
+    const getName= () => {
+          console.log(user);
+
     }
     
     //console.log(userPosts)
@@ -130,21 +140,22 @@ function Profile(props) {
                   </View>
 
                   <View style={styles.infoContainer}>
-                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>Nathan Andrews</Text>
-                        <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Photographer</Text>
+                        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>{getName()}</Text>
+                        
+                        <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>Hi, I use SeamZo</Text>
                   </View>
 
                   <View style={styles.statsContainer}>
                         <View style={styles.statsBox}>
-                              <Text style={[styles.text, { fontSize: 24 }]}>483</Text>
+                              <Text style={[styles.text, { fontSize: 24 }]}>0</Text>
                               <Text style={[styles.text, styles.subText]}>Posts</Text>
                         </View>
                         <View style={[styles.statsBox, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
-                              <Text style={[styles.text, { fontSize: 24 }]}>45,844</Text>
+                              <Text style={[styles.text, { fontSize: 24 }]}>0</Text>
                               <Text style={[styles.text, styles.subText]}>Followers</Text>
                         </View>
                         <View style={styles.statsBox}>
-                              <Text style={[styles.text, { fontSize: 24 }]}>302</Text>
+                              <Text style={[styles.text, { fontSize: 24 }]}>1</Text>
                               <Text style={[styles.text, styles.subText]}>Following</Text>
                         </View>
                   </View>
@@ -155,10 +166,10 @@ function Profile(props) {
                               numColumns={3}
                               horizontal={false}
                               data={userPosts}
+                              
                               renderItem={({ item }) => (
                                     
                                     <View style={styles.mediaImageContainer}>
-
                                           <Image
                                                 style={styles.imagePost}
                                                 resizeMode="contain"
@@ -191,6 +202,7 @@ function Profile(props) {
                 ) :
                     <TouchableOpacity style={styles.buttonStyle} onPress={() => onLogout()}>
                       <Text style={styles.buttonTextStyle}>LOGOUT</Text>
+                      
                   </TouchableOpacity>}
             </View>
         </SafeAreaView>

@@ -69,18 +69,17 @@ class BottomTabNavigator extends Component {
 
                          {/*  Profile Page Navigation */}
                         <Tab.Screen name="ProfilePage" component={ProfileScreen} 
-                        options={{ headerShown: false }}
-                        
-                        listeners={({ navigation }) => ({
+                              listeners={({ navigation }) => ({
                               tabPress: event => {
-                                    event.preventDefault();
-                                    navigation.navigate("ProfilePage", {uid: firebase.auth().currentUser.uid})
-                              }})}
-                              options={{
-                                    tabBarIcon: ({ color, size }) => (
-                                    <MaterialCommunityIcons name="account-circle" color={color} size={26} />
-                                    ),
-                              }} />
+                              event.preventDefault();
+                              navigation.navigate("ProfilePage", { uid: firebase.auth().currentUser.uid })
+                              }
+                        })}
+                        options={{
+                              tabBarIcon: ({ color, size }) => (
+                              <MaterialCommunityIcons name="account-circle" color={color} size={26} />
+                              ),
+                        }} />
                   </Tab.Navigator>
             )
       }
@@ -93,5 +92,7 @@ const mapStateToProps = (store) => ({
 })
 
 const mapDispatchProps = (dispatch) => bindActionCreators({ fetchUser, fetchUserPosts, fetchUserFollowing, clearData }, dispatch);
+
+
 
 export default connect(mapStateToProps, mapDispatchProps)(BottomTabNavigator);
