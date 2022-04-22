@@ -1,41 +1,57 @@
-import { StatusBar } from 'expo-status-bar';
+
+import { StyleSheet, Text, View } from 'react-native';
 import React, {Component} from 'react';
-
-import { render } from 'react-dom';
-import { Dimensions,StyleSheet, Text, View, Image, SafeAreaView, Platform } from 'react-native';
-
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import rootReducer from './app/redux/reducers'
-import thunk from 'redux-thunk'
-const store = createStore(rootReducer, applyMiddleware(thunk))
-
-import firebase from "firebase/app"
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBSS_0MwUXbsob-msOHPw_cyAnuqx90Nh4",
-  authDomain: "seamzo.firebaseapp.com",
-  projectId: "seamzo",
-  storageBucket: "seamzo.appspot.com",
-  messagingSenderId: "872280386420",
-  appId: "1:872280386420:web:a1c8309b64c20139e95a21",
-  measurementId: "G-6PHYXKJ099"
-};
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig)
-}
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import BottomTabNavigator from './app/components/BottomTabNavigator'
-import Add from './app/components/main/AddPost'
-import Upload from './app/components/main/Upload'
-import Landing from './app/components/auth/LandingScreen'
-import Login from './app/components/auth/LoginScreen'
-import Signup from './app/components/auth/SignupScreen'
-import UalRenderer from './app/components/auth/UalRenderer'
+import LoginScreen from './Screens/LoginScreen';
+import HomeScreen from './Screens/HomeScreen';
+import UalRenderer from './Screens/UalRenderer';
+import LandingScreen from './Screens/LandingScreen';
+import BottomTabNavigator from './BottomTabNavigator';
+import OnboardingScreen from './Screens/OnboardingScreen';
+import {auth} from './firebase';
+import AddPostScreen from './Screens/AddPostScreen';
+import { useMemo } from 'react/cjs/react.production.min';
+// import { useEffect } from 'react/cjs/react.production.min';
+
+
+// const Stack = createNativeStackNavigator();
+
+// const App=()=> {
+//   const [userInfo, setUserInfo ] = useState(undefined)
+//   // const [loaded, setLoaded ] = useState(false);
+  
+//   useEffect(() => {
+//     const authUser = auth.onAuthStateChanged(user => setUserInfo(user))
+//     return authUser
+//   },[])
+  
+//   if (!userInfo) {
+//     return (
+//       <NavigationContainer>
+//       <Stack.Navigator  headerMode="none">
+//       {/* <Stack.Screen  name="Onboarding" component={OnboardingScreen} /> */}
+      
+//         <Stack.Screen  name="Login" component={LoginScreen} />
+        
+//         <Stack.Screen name="Anchor" component={UalRenderer}  />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//     );
+//   } else {
+//     return(
+//       <NavigationContainer >
+//                 <Stack.Navigator initialRouteName="BottomTabNavigator">
+//                   <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
+//                   <Stack.Screen  name="AddPost" component={AddPostScreen} />
+//                   <Stack.Screen name="Home" component={HomeScreen}  />
+//                 </Stack.Navigator>
+//       </NavigationContainer>
+//       );
+// }
+// }
+// export default App;
+
 
 const Stack = createStackNavigator();
 
@@ -48,7 +64,8 @@ class App extends Component {
     }
   }
  componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+   //Checks if the user is already logged In and set the loggedIn variable
+    auth.onAuthStateChanged((user) => {
       if (!user) {
         this.setState({
           loggedIn: false,
@@ -64,43 +81,42 @@ class App extends Component {
   }
 render() {
     const { loggedIn, loaded } = this.state;
+    //If the screen is not loaded yet shows loading...
     if (!loaded) {
       return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Text>Loading</Text>
+        <View style={{ flex: 1, justifyContent: 'center' , alignItems: 'center'}}>
+          <Text>Loading...</Text>
         </View>
       )
     }
-
+    //If the user is not logged In it will render authentication screens
     if (!loggedIn) {
       return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="LandingScreen">
-            <Stack.Screen name="LandingScreen" component={Landing} options={{ headerShown: false }} />
-            <Stack.Screen name="LoginScreen" component={Login} />
-            <Stack.Screen name="SignupScreen" component={Signup} />
-            <Stack.Screen name="UalRenderer" component={UalRenderer} />
-            
+            <Stack.Screen name="LandingScreen" component={LandingScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+
           </Stack.Navigator>
         </NavigationContainer>
       );
     }
+    //if the user is already logged In it will render this.
   return ( 
-    <Provider store={store}>
+    
       <NavigationContainer >
-          <Stack.Navigator initialRouteName="BottomTabNavigator">
-            <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
-            {/* <Stack.Screen name="UalRenderer" component = {UalRenderer} navigation={this.props.navigation} /> */}
-            <Stack.Screen name="AddPost" component = {Add} navigation={this.props.navigation} />
-            <Stack.Screen name="Upload" component = {Upload} navigation= {this.props.navigation} />
-            
+          <Stack.Navigator initialRouteName="SeamZo">
+            <Stack.Screen name="SeamZo" component={BottomTabNavigator}  />
+            <Stack.Screen  name="AddPost" component={AddPostScreen}  options={{ headerShown: false }}/>
+            <Stack.Screen name="Home" component={HomeScreen}  options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
-    </Provider>        
+       
     );
   }
 }
 
 export default App
+
 
 
