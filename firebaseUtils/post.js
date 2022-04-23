@@ -46,11 +46,19 @@ class Post {
             .then(querySnapshot => {
                 let data = []
                 querySnapshot.forEach(record => {
-                    data.push(record.data())
+                    data.push({...record.data(),id:record.id})
                 })
                 return data
             })
             return posts
+        } catch {
+            return false
+        }
+    }
+    
+    async update(id,fields) {
+        try {
+            firestore.collection("posts").doc(id).update(fields);
         } catch {
             return false
         }

@@ -24,70 +24,53 @@ import { auth } from '../firebase'
 import Post from '../firebaseUtils/post'
 
 
-const PostCard = ({item}) => {
+const ProfilePostCard = ({item}) => {
 
   const [Nft, setNft] = useState(false)
   const [Nftissued, setNftissued] = useState(false)
+  const [isNft, setIsNft] = useState(item.is_nft)
   // var likeIcon = item.like ? 'heart' : 'heart-outline';
   var likeIcon = 'heart';
   var likeIonColor = '#2e64e5' ;
   const [user, setUser] = useState(undefined)
-  const [isLiked, setIsLiked] = useState(item.likes.includes(auth.currentUser.uid))
-  const [likeCount, setLikeCount] = useState(item.likes.length)
-  const [isOwnedNft, setIsOwnedNft] = useState(false)
+
+// This gets the user data from users collection in firestore on the base of user Id
+  useEffect(() => {
+    if(!item.user_id) return
+    getUser(item.user_id).then(res => setUser(res))
+  },[item])
+
+  if(item.comments==1){
+    var commentText='1 Comment'
+  } else if (item.comments>1){
+    var commentText= item.comments + ' Comments'
+  } else{
+    var commentText='Comment'
+  }
+  // var nft=false;
+  // useEffect(() => {
+  //   if(nft==true){
+
+  //     navigation.replace("Login")
+  //   }
     
- // This gets the user data from users collection in firestore on the base of user Id
- useEffect(() => {
-  if(!item.user_id) return
-  getUser(item.user_id).then(res => setUser(res))
-},[item])
-
-if(item.comments==1){
-  var commentText='1 Comment'
-} else if (item.comments>1){
-  var commentText= item.comments + ' Comments'
-} else{
-  var commentText='Comment'
-}
-// var nft=false;
-// useEffect(() => {
-//   if(nft==true){
-
-//     navigation.replace("Login")
-//   }
+  // }, [])
   
-// }, [])
-
 //this function creates the Nft  and adds it into EOS blockchain
-const createNft = () => {
-  
-  console.log(item.symbol)
-  CreateNft(item.symbol)
-  setNft(true);
-}
+  const createNft = () => {
+    
+    console.log(item.symbol)
+    CreateNft(item.symbol)
+    setIsNft(true);
+    const post = new Post()
+    post.update(item.id,{is_nft:true})
+  }
 //this funtion issues the NFT to the users
   const issueNft = () => {
+    
     console.log(item.symbol)
     IssueNft(item.symbol,user.username,item.description)
-    const post = new Post()
-    post.update(item.id,{user_id:auth.currentUser.uid})
-    setIsOwnedNft(true);
-  }
-
-  const likePost = () => {
-    const post = new Post()
-    const likes = [...item.likes,auth.currentUser.uid]
-    post.update(item.id,{likes})
-    setIsLiked(true)
-    setLikeCount(likeCount+1)
-  }
-
-  const unLikePost = () => {
-    const post = new Post()
-    const likes = item.likes.filter(like => like !== auth.currentUser.uid)
-    post.update(item.id,{likes})
-    setIsLiked(false)
-    setLikeCount(likeCount-1)
+    setNftissued(true);
   }
 
   if(!item || !user) return null
@@ -106,15 +89,15 @@ const createNft = () => {
          {item.postImg != 'none' ? <PostImg source={item.post_image}/>: <Divider/>}
          <InteractionWrapper>
            {/* if the post is liked it changes the color of heart icon */}
-           {isLiked ? (
-             <Liked onPress={unLikePost}>
+           {item.likes.includes(auth.currentUser.uid) ? (
+             <Liked >
              <Ionicons name={'heart'}  size={25} color={likeIonColor}/>
-             <InteractionText>{likeCount ? likeCount+' Likes' : 'Like'}</InteractionText>
+             <InteractionText>{item.likes.length ? item.likes.length+' Likes' : 'Like'}</InteractionText>
             </Liked>
            ) : (
-            <NotLiked onPress={likePost}>
+            <NotLiked >
             <Ionicons name={'heart-outline'}  size={25} color={likeIonColor}/>
-            <InteractionText>{likeCount ? likeCount+' Likes' : 'Like'}</InteractionText>
+            <InteractionText>{item.likes.length ? item.likes.length+' Likes' : 'Like'}</InteractionText>
             </NotLiked>
            )}
            <Interaction >
@@ -123,21 +106,15 @@ const createNft = () => {
            </Interaction>
            {/* checks if the post is already an NFT then shows the NFT text else 
               shows the button to create and issue button */}
-           { item.is_nft && (isOwnedNft ? 
-           <>
-           <Ionicons name="pricetags-outline" size={25}/>
-           <InteractionText>Owned NFT</InteractionText>
-           </> : <Interaction onPress={issueNft}>
-             <Ionicons name="pricetags-outline" size={25}/>
-             <InteractionText>Buy NFT
-              {'\n '}
-              2 EOS
-             </InteractionText>
-             </Interaction>)}
+           { isNft ? <> <Ionicons name="pricetags-outline" size={25}/>
+            <InteractionText>NFT</InteractionText> </> : <Interaction onPress={createNft}>
+                            <Ionicons name="pricetags-outline" size={25}/>
+                            <InteractionText>Create NFT</InteractionText>
+                          </Interaction>}
                     
          </InteractionWrapper>
        </Card>
   );
 };
 
-export default PostCard;
+export default ProfilePostCard;

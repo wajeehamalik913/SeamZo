@@ -71,6 +71,7 @@ export const InteractionWrapper = styled.View`
     flex-direction: row;
     justify-content: space-around;
     padding: 15px;
+    width: 310px;
 `;
 
 export const Liked = styled.TouchableOpacity`

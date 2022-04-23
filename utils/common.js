@@ -18,7 +18,8 @@ export const mHash = () => {
 export const getUser = (uid) => {
     const user = firestore.collection('users').where('uid','==',uid).get()
     .then(querySnapShot => {
-        return querySnapShot.docs[0].data()
+        const user = {...querySnapShot.docs[0].data(),id:querySnapShot.docs[0].id}
+        return user
     })
     return user
 }

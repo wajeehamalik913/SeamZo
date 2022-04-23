@@ -39,7 +39,7 @@ and adds user information to users collection */
           password,
           wallet_acc:''
         })
-        user.save().then(() => navigation.replace("Home"))
+        user.save().then(() => navigation.navigate({ name: 'SeamZo', merge: true }))
       })
       .catch(error => alert(error.message))
   }
@@ -52,7 +52,7 @@ and adds user information to users collection */
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.email);
-        navigation.replace("Home")
+        navigation.navigate({ name: 'SeamZo', merge: true })
       })
       .catch(error => alert(error.message))
   }

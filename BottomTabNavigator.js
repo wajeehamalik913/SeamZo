@@ -41,12 +41,12 @@ class BottomTabNavigator extends Component {
 
 
                         {/*  Search Screen Navigation */}
-                        <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation}
+                        {/* <Tab.Screen name="Search" component={SearchScreen} navigation={this.props.navigation}
                               options={{
                                     tabBarIcon: ({ color, size }) => (
                                     <MaterialCommunityIcons name="magnify" color={color} size={26} />
                                     ),
-                              }} />
+                              }} /> */}
 
                         {/*  Adding Pictures or Taking Pictures Navigation
                         It will Navigate to Camera  */}
