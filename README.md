@@ -24,4 +24,4 @@ To install all dependencies
 
 Then run 
 
-npm start
+*npm start*
