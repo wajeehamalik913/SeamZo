@@ -19,7 +19,9 @@ it. People can copy and produce it but there is only the owner i.e you.
 To use the application clone the repo
 
 To install all dependencies
-npm install
+
+*npm install*
 
 Then run 
+
 npm start
