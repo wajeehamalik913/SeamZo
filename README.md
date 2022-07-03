@@ -20,7 +20,7 @@ To use the application clone the repo
 
 To install all dependencies
 
-*#npm install*
+*npm install*
 
 Then run 
 
