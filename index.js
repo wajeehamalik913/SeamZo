@@ -9,7 +9,6 @@ const { applyMiddleware } = require('redux');
 
 
 
-const conn_uri = "mongodb+srv://wajeehaMalik452:Seamzo2021@cluster0.yatvu.mongodb.net/myFinorstDatabase?retryWrites=true&w=majority";
 
 const client = new MongoClient(conn_uri, { 
   useCreateIndex: true,
